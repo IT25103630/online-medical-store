@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Medicines Online | MediCare</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            background: var(--primary);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .shop-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 5rem;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-widget h3 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-item:hover, .category-item.active {
+            background-color: rgba(15, 118, 110, 0.1);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius-full);
+            font-family: inherit;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* Product Grid */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .product-rating {
+            color: var(--accent);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating span {
+            color: var(--text-secondary);
+            margin-left: 0.25rem;
+        }
+
+        .product-footer {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .btn-add-to-cart {
+            background: var(--primary-light);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .btn-add-to-cart:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--border);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 992px) {
+            .shop-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: sticky;
+                top: 80px;
+                z-index: 90;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container nav-container">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            Medi<span>Care</span>
+        </a>
+
+        <nav id="nav-links" class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="medicines.html" class="nav-link active">Medicines</a>
+            <a href="prescription.html" class="nav-link">Upload Prescription</a>
+            <a href="contact.html" class="nav-link">Contact & Doctors</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="#" class="cart-icon" title="View Cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </a>
+            <a href="login.html" class="btn btn-primary d-none d-md-flex">Login / Register</a>
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1>Shop Medicines</h1>
+        <p>100% genuine medicines delivered to your doorstep</p>
+    </div>
+</div>
+
+<!-- Shop Content -->
+<div class="container shop-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search medicines...">
+        </div>
+
+        <div class="sidebar-widget">
+            <h3>Categories</h3>
+            <div class="category-list" id="categoryList">
+                <div class="category-item active" data-id="all">
+                    <span>All Products</span>
+                    <span class="badge badge-primary" id="allCount">0</span>
+                </div>
+                <!-- Categories injected by JS -->
+            </div>
+        </div>
+
+        <div class="sidebar-widget">
+            <h3>Filter by Price</h3>
+            <div style="padding: 0.5rem 0;">
+                <div class="form-group">
+                    <input type="range" id="priceRange" min="0" max="100" value="100" style="width: 100%;">
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.875rem;">
+                        <span>$0</span>
+                        <span id="priceValue">$100</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <div class="products-header">
+            <p>Showing <span id="productCount">0</span> results</p>
+            <select class="form-control" style="width: 200px;" id="sortSelect">
+                <option value="default">Default Sorting</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+            </select>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products injected via JS -->
+        </div>
+    </main>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo mb-4" style="color: white;">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    Medi<span style="color: var(--primary-light);">Care</span>
+                </div>
+                <p style="color: #cbd5e1; margin-bottom: 1.5rem;">Your trusted online pharmacy for quality
+                    medicines.</p>
+            </div>
+
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="medicines.html">Shop Medicines</a></li>
+                    <li><a href="prescription.html">Upload Prescription</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col" id="footerCategoriesCol">
+                <h3>Categories</h3>
+                <ul class="footer-links" id="footerCategories"></ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <ul class="footer-links">
+                    <li style="color: #cbd5e1; display: flex; gap: 0.75rem;"><i class="fa-solid fa-envelope"
+                                                                                style="margin-top: 5px;"></i>
+                        support@medicare.com
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MediCare Online Pharmacy. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check for category in URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialCategory = urlParams.get('category') || 'all';
+
+        let currentCategory = initialCategory;
+        let currentSearch = '';
+        let maxPrice = 100;
+        let currentSort = 'default';
+
+        const categoryList = document.getElementById('categoryList');
+        const productsGrid = document.getElementById('productsGrid');
+        const productCount = document.getElementById('productCount');
+        const allCount = document.getElementById('allCount');
+        const searchInput = document.getElementById('searchInput');
+        const priceRange = document.getElementById('priceRange');
+        const priceValue = document.getElementById('priceValue');
+        const sortSelect = document.getElementById('sortSelect');
+        const footerCategories = document.getElementById('footerCategories');
+
+        allCount.textContent = products.length;
+
+        // Populate Sidebar Categories
+        categories.forEach(cat => {
+            const count = products.filter(p => p.category === cat.id).length;
+            const div = document.createElement('div');
+            div.className = `category-item ${currentCategory === cat.id ? 'active' : ''}`;
+            div.dataset.id = cat.id;
+            div.innerHTML = `
+                    <span>${cat.name}</span>
+                    <span class="badge ${count > 0 ? 'badge-primary' : ''}">${count}</span>
+                `;
+
+            div.addEventListener('click', () => {
+                document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+                div.classList.add('active');
+                currentCategory = cat.id;
+                renderProducts();
+            });
+            categoryList.appendChild(div);
+
+            // Populate footer
+            if (footerCategories.children.length < 5) {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="medicines.html?category=${cat.id}">${cat.name}</a>`;
+                footerCategories.appendChild(li);
+            }
+        });
+
+        // Set initially active category in sidebar if not 'all'
+        if (currentCategory !== 'all') {
+            const initialActive = categoryList.querySelector(`[data-id="all"]`);
+            if (initialActive) initialActive.classList.remove('active');
+        }
+
+        // All Products Click
+        categoryList.querySelector('[data-id="all"]').addEventListener('click', function () {
+            document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+            this.classList.add('active');
+            currentCategory = 'all';
+            renderProducts();
+        });
+
+        // Search
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase();
+            renderProducts();
+        });
+
+        // Price Range
+        priceRange.addEventListener('input', (e) => {
+            maxPrice = parseInt(e.target.value);
+            priceValue.textContent = `$${maxPrice}`;
+            renderProducts();
+        });
+
+        // Sorting
+        sortSelect.addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            renderProducts();
+        });
+
+        // Render Products
+        window.renderProducts = function () { // Made global to let it run properly
+            let filtered = products;
+
+            // Filter by category
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(p => p.category === currentCategory);
+            }
+
+            // Filter by search
+            if (currentSearch) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(currentSearch) || p.description.toLowerCase().includes(currentSearch));
+            }
+
+            // Filter by price
+            filtered = filtered.filter(p => p.price <= maxPrice);
+
+            // Sort
+            if (currentSort === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (currentSort === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (currentSort === 'rating') {
+                filtered.sort((a, b) => b.rating - a.rating);
+            }
+
+            productCount.textContent = filtered.length;
+            productsGrid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                productsGrid.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-box-open"></i>
+                            <h3>No products found</h3>
+                            <p>Try adjusting your search or filters.</p>
+                        </div>
+                    `;
+                return;
+            }
+
+            filtered.forEach(product => {
+                const catName = categories.find(c => c.id === product.category)?.name || 'General';
+                const card = document.createElement('div');
+                card.className = 'product-card animate-fade-in';
+
+                const prescrBadge = product.requiresPrescription ?
+                    `<span class="badge badge-warning product-badge"><i class="fa-solid fa-file-prescription"></i> Rx Req</span>` : '';
+
+                let stars = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= Math.floor(product.rating)) stars += '<i class="fa-solid fa-star"></i>';
+                    else if (i === Math.ceil(product.rating)) stars += '<i class="fa-solid fa-star-half-stroke"></i>';
+                    else stars += '<i class="fa-regular fa-star"></i>';
+                }
+
+                card.innerHTML = `
+                        ${prescrBadge}
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}">
+                        </div>
+                        <div class="product-content">
+                            <span class="product-category">${catName}</span>
+                            <h3 class="product-title">${product.name}</h3>
+                            <div class="product-rating">
+                                ${stars}
+                                <span>(${product.rating})</span>
+                            </div>
+                            <div class="product-footer">
+                                <span class="product-price">$${product.price.toFixed(2)}</span>
+                                <button class="btn-add-to-cart" onclick="addToCart('${product.id}')" title="Add to Cart">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                productsGrid.appendChild(card);
+            });
+        }
+
+        // Initial render
+        renderProducts();
+    });
+</script>
+</body>
+</html>

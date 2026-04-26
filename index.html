@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare | Your Trusted Online Pharmacy</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* Home Page Specific Styles */
+        .hero {
+            position: relative;
+            padding: 8rem 0;
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.05) 0%, rgba(20, 184, 166, 0.1) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .hero-content h1 span {
+            color: var(--primary);
+        }
+
+        .hero-content p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 90%;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-hover);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: var(--transition);
+        }
+
+        .hero-image:hover img {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: -4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background-color: rgba(15, 118, 110, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Top Categories Section */
+        .categories-section {
+            background-color: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            display: block;
+            background: var(--background);
+            padding: 2rem 1rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .category-card:hover {
+            border-color: var(--primary);
+            background-color: white;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .category-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .category-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .category-card h4 {
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: var(--border-radius-lg);
+            padding: 4rem;
+            text-align: center;
+            margin: 5rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 992px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .cta-section {
+                padding: 3rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container nav-container">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            Medi<span>Care</span>
+        </a>
+
+        <nav id="nav-links" class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="medicines.html" class="nav-link">Medicines</a>
+            <a href="prescription.html" class="nav-link">Upload Prescription</a>
+            <a href="contact.html" class="nav-link">Contact & Doctors</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="#" class="cart-icon" title="View Cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </a>
+            <a href="login.html" class="btn btn-primary d-none d-md-flex">Login / Register</a>
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container hero-container animate-fade-in">
+        <div class="hero-content">
+            <div class="badge badge-primary mb-3">#1 Online Healthcare Partner</div>
+            <h1>Your Health, Our<br><span>Priority Priority</span></h1>
+            <p>Order medicines, upload prescriptions, and consult with top doctors from the comfort of your home. Fast,
+                reliable, and secure.</p>
+            <div class="hero-actions">
+                <a href="medicines.html" class="btn btn-primary">Shop Medicines</a>
+                <a href="prescription.html" class="btn btn-outline">Upload Prescription</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                 alt="Doctor providing healthcare online">
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<div class="container">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <h3>Free Delivery</h3>
+            <p>On orders above $50. Get your medicines delivered within 24 hours.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3>100% Genuine</h3>
+            <p>Authentic medicines sourced directly from authorized dealers.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+            <h3>Expert Doctors</h3>
+            <p>Consult with specialized doctors online safely and securely.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-file-prescription"></i>
+            </div>
+            <h3>Easy Refills</h3>
+            <p>Upload your prescription once and schedule automatic refills.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Top Categories -->
+<section class="section-padding categories-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Browse Categories</h2>
+            <p>Find everything you need for your healthcare and wellness.</p>
+        </div>
+
+        <div class="category-grid" id="categoryGrid">
+            <!-- Categories will be injected via JS -->
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<div class="container">
+    <div class="cta-section">
+        <h2>Need a Doctor's Advice?</h2>
+        <p>Connect with our expert specialists for a video consultation. Get prescriptions digitally from certified
+            medical professionals.</p>
+        <a href="contact.html" class="btn btn-accent" style="font-size: 1.125rem; padding: 1rem 2rem;">
+            <i class="fa-solid fa-video" style="margin-right: 0.5rem;"></i> Channel a Doctor Now
+        </a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo mb-4" style="color: white;">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    Medi<span style="color: var(--primary-light);">Care</span>
+                </div>
+                <p style="color: #cbd5e1; margin-bottom: 1.5rem;">Your trusted online pharmacy for quality medicines,
+                    health products, and doctor consultations.</p>
+                <div style="display: flex; gap: 1rem; font-size: 1.25rem;">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="medicines.html">Shop Medicines</a></li>
+                    <li><a href="prescription.html">Upload Prescription</a></li>
+                    <li><a href="contact.html">Doctor Channeling</a></li>
+                    <li><a href="#">About Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Categories</h3>
+                <ul class="footer-links" id="footerCategories">
+                    <!-- Populated via JS -->
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <ul class="footer-links">
+                    <li style="color: #cbd5e1; display: flex; gap: 0.75rem;"><i class="fa-solid fa-location-dot"
+                                                                                style="margin-top: 5px;"></i> 123 Health
+                        Ave, Medical City, MC 10010
+                    </li>
+                    <li style="color: #cbd5e1; display: flex; gap: 0.75rem;"><i class="fa-solid fa-phone"
+                                                                                style="margin-top: 5px;"></i> +1 (800)
+                        123-4567
+                    </li>
+                    <li style="color: #cbd5e1; display: flex; gap: 0.75rem;"><i class="fa-solid fa-envelope"
+                                                                                style="margin-top: 5px;"></i>
+                        support@medicare.com
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 MediCare Online Pharmacy. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Populate Categories Grid
+        const categoryGrid = document.getElementById('categoryGrid');
+        const footerCategories = document.getElementById('footerCategories');
+
+        categories.forEach(category => {
+            // Add to main grid
+            const card = document.createElement('a');
+            card.href = `medicines.html?category=${category.id}`;
+            card.className = 'category-card';
+            card.innerHTML = `
+                    <i class="fa-solid ${category.icon}"></i>
+                    <h4>${category.name}</h4>
+                `;
+            categoryGrid.appendChild(card);
+
+            // Add to footer lists (limit to 5)
+            if (footerCategories.children.length < 5) {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="medicines.html?category=${category.id}">${category.name}</a>`;
+                footerCategories.appendChild(li);
+            }
+        });
+    });
+</script>
+</body>
+</html>

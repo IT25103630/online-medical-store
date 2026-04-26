@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Prescription | MediCare</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #334155 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .upload-steps {
+            display: flex;
+            background: var(--background);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 1.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .step.active {
+            color: var(--primary);
+            background: white;
+        }
+
+        .step.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .step i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-content {
+            padding: 3rem;
+        }
+
+        /* Drag and Drop Zone */
+        .dropzone {
+            border: 2px dashed var(--border);
+            border-radius: var(--border-radius);
+            padding: 4rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--background);
+            margin-bottom: 2rem;
+        }
+
+        .dropzone.dragover {
+            border-color: var(--primary);
+            background: rgba(15, 118, 110, 0.05);
+        }
+
+        .dropzone-icon {
+            font-size: 4rem;
+            color: var(--primary-light);
+            margin-bottom: 1rem;
+        }
+
+        .dropzone-text {
+            font-size: 1.125rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .dropzone-subtext {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* File Preview */
+        .file-preview {
+            display: none;
+            align-items: center;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .file-preview.active {
+            display: flex;
+        }
+
+        .file-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-right: 1rem;
+        }
+
+        .file-details {
+            flex-grow: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .file-size {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .remove-file {
+            color: var(--error);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .remove-file:hover {
+            transform: scale(1.1);
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .guidelines {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .guidelines h4 {
+            color: #b45309;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .guidelines ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            color: #78350f;
+            font-size: 0.875rem;
+        }
+
+        /* Success State */
+        .success-state {
+            display: none;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .success-state.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-content {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container nav-container">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            Medi<span>Care</span>
+        </a>
+
+        <nav id="nav-links" class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="medicines.html" class="nav-link">Medicines</a>
+            <a href="prescription.html" class="nav-link active">Upload Prescription</a>
+            <a href="contact.html" class="nav-link">Contact & Doctors</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="#" class="cart-icon" title="View Cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </a>
+            <a href="login.html" class="btn btn-primary d-none d-md-flex">Login / Register</a>
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1>Upload Prescription</h1>
+        <p>Upload your valid prescription and we'll deliver the medicines to you.</p>
+    </div>
+</div>
+
+<!-- Upload Section -->
+<div class="container">
+    <div class="upload-container animate-fade-in">
+        <div class="upload-steps">
+            <div class="step active" id="step1-tab">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                1. Upload
+            </div>
+            <div class="step" id="step2-tab">
+                <i class="fa-solid fa-clipboard-list"></i>
+                2. Details
+            </div>
+            <div class="step" id="step3-tab">
+                <i class="fa-solid fa-truck-fast"></i>
+                3. Order
+            </div>
+        </div>
+
+        <div class="upload-content">
+            <!-- Step 1: Upload -->
+            <div id="step1-content">
+                <div class="guidelines">
+                    <h4><i class="fa-solid fa-circle-info"></i> Prescription Guidelines</h4>
+                    <ul>
+                        <li>Must be issued by a registered medical practitioner.</li>
+                        <li>Should clearly show patient name, doctor name, and date.</li>
+                        <li>Supported formats: JPG, PNG, PDF (Max 5MB).</li>
+                    </ul>
+                </div>
+
+                <div class="dropzone" id="dropzone">
+                    <i class="fa-solid fa-file-medical dropzone-icon"></i>
+                    <p class="dropzone-text">Drag & Drop your prescription here</p>
+                    <p class="dropzone-subtext">or click to browse from your device</p>
+                    <input type="file" id="fileInput" accept="image/jpeg, image/png, application/pdf">
+                    <button class="btn btn-outline mt-3" onclick="document.getElementById('fileInput').click()">Browse
+                        Files
+                    </button>
+                </div>
+
+                <div class="file-preview" id="filePreview">
+                    <i class="fa-solid fa-file-image file-icon"></i>
+                    <div class="file-details">
+                        <div class="file-name" id="fileName">prescription.jpg</div>
+                        <div class="file-size" id="fileSize">2.4 MB</div>
+                    </div>
+                    <button class="remove-file" id="removeFile" title="Remove file">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+
+                <div style="text-align: right;">
+                    <button class="btn btn-primary" id="btnNext1" disabled>Continue <i class="fa-solid fa-arrow-right"
+                                                                                       style="margin-left: 0.5rem;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Details -->
+            <div id="step2-content" style="display: none;">
+                <form id="detailsForm">
+                    <h3 class="mb-4 text-secondary">Patient Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" required placeholder="Full Name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" required placeholder="Mobile Number">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Delivery Address</label>
+                            <textarea class="form-control" rows="3" required
+                                      placeholder="Complete address for delivery"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Any note for the pharmacist? (Optional)</label>
+                            <textarea class="form-control" rows="2"
+                                      placeholder="E.g., Please provide 1 month supply"></textarea>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+                        <button type="button" class="btn btn-outline" id="btnBack1"><i class="fa-solid fa-arrow-left"
+                                                                                       style="margin-right: 0.5rem;"></i>
+                            Back
+                        </button>
+                        <button type="submit" class="btn btn-primary">Place Order <i class="fa-solid fa-check"
+                                                                                     style="margin-left: 0.5rem;"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Success -->
+            <div id="step3-content" class="success-state">
+                <div class="success-icon animate-fade-in">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h2 class="mb-3 text-secondary">Prescription Uploaded Successfully!</h2>
+                <p class="text-secondary mb-4">Your order ID is <strong>#MED-84729</strong>. Our pharmacist will review
+                    your prescription and confirm your order shortly via SMS/Email.</p>
+
+                <div style="background: var(--background); padding: 1.5rem; border-radius: var(--border-radius); display: inline-block; text-align: left; margin-bottom: 2rem;">
+                    <h4 class="mb-2">What happens next?</h4>
+                    <ol style="margin-left: 1rem; color: var(--text-secondary); font-size: 0.875rem; line-height: 1.8;">
+                        <li>Pharmacist reviews prescription (Usually within 30 mins)</li>
+                        <li>You receive a payment link for the medicines</li>
+                        <li>Order is dispatched after payment</li>
+                        <li>Delivery at your doorstep!</li>
+                    </ol>
+                </div>
+                <br>
+                <a href="index.html" class="btn btn-primary">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo mb-4" style="color: white;">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    Medi<span style="color: var(--primary-light);">Care</span>
+                </div>
+                <p style="color: #cbd5e1; margin-bottom: 1.5rem;">Your trusted online pharmacy.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="medicines.html">Shop Medicines</a></li>
+                    <li><a href="contact.html">Doctor Channeling</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MediCare Online Pharmacy. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const removeFileBtn = document.getElementById('removeFile');
+        const btnNext1 = document.getElementById('btnNext1');
+        const btnBack1 = document.getElementById('btnBack1');
+        const detailsForm = document.getElementById('detailsForm');
+
+        let uploadedFile = null;
+
+        // Drag and Drop Logic
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, () => dropzone.classList.remove('dragover'), false);
+        });
+
+        dropzone.addEventListener('drop', handleDrop, false);
+
+        // Dropzone click opens file dialog (already handled by button but lets add to area too)
+        dropzone.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') {
+                fileInput.click();
+            }
+        });
+
+        fileInput.addEventListener('change', function () {
+            if (this.files.length) {
+                handleFiles(this.files);
+            }
+        });
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            const file = files[0];
+            const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+
+            if (!validTypes.includes(file.type)) {
+                alert('Invalid file format. Please upload JPG, PNG, or PDF.');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File is too large. Maximum size is 5MB.');
+                return;
+            }
+
+            uploadedFile = file;
+
+            // Show Preview
+            fileName.textContent = file.name;
+            fileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+
+            const icon = filePreview.querySelector('.file-icon');
+            if (file.type === 'application/pdf') {
+                icon.className = 'fa-solid fa-file-pdf file-icon';
+            } else {
+                icon.className = 'fa-solid fa-file-image file-icon';
+            }
+
+            dropzone.style.display = 'none';
+            filePreview.classList.add('active');
+            btnNext1.disabled = false;
+        }
+
+        removeFileBtn.addEventListener('click', () => {
+            uploadedFile = null;
+            fileInput.value = '';
+            filePreview.classList.remove('active');
+            dropzone.style.display = 'block';
+            btnNext1.disabled = true;
+        });
+
+        // Navigation between steps
+        function showStep(stepNum) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${stepNum}-tab`).classList.add('active');
+
+            document.getElementById('step1-content').style.display = 'none';
+            document.getElementById('step2-content').style.display = 'none';
+            document.getElementById('step3-content').classList.remove('active');
+
+            if (stepNum === 3) {
+                document.getElementById(`step${stepNum}-content`).classList.add('active');
+            } else {
+                document.getElementById(`step${stepNum}-content`).style.display = 'block';
+            }
+        }
+
+        btnNext1.addEventListener('click', () => showStep(2));
+        btnBack1.addEventListener('click', () => showStep(1));
+
+        detailsForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Simulate form submission delay
+            const btn = detailsForm.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                showStep(3);
+            }, 1500);
+        });
+    });
+</script>
+</body>
+</html>

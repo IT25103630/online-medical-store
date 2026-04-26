@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Doctor Channeling | MediCare</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin: 4rem 0;
+        }
+
+        /* Contact Info Cards */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(15, 118, 110, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin: 0 auto 1rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-form h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+
+        /* Doctors Section */
+        .doctors-section {
+            background: var(--background);
+            padding: 5rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .doctor-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .doctor-header {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .doctor-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+        }
+
+        .doctor-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .doctor-specialty {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .doctor-body {
+            padding: 1.5rem;
+        }
+
+        .doctor-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .doctor-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .available-times {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .time-slot {
+            padding: 0.5rem 1rem;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .time-slot:hover, .time-slot.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-hover);
+            transform: scale(0.9);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--error);
+        }
+
+        @media (max-width: 992px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container nav-container">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            Medi<span>Care</span>
+        </a>
+
+        <nav id="nav-links" class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="medicines.html" class="nav-link">Medicines</a>
+            <a href="prescription.html" class="nav-link">Upload Prescription</a>
+            <a href="contact.html" class="nav-link active">Contact & Doctors</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="#" class="cart-icon" title="View Cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </a>
+            <a href="login.html" class="btn btn-primary d-none d-md-flex">Login / Register</a>
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <h1>Contact Us & Doctor Channeling</h1>
+        <p>Get in touch with our team or book a consultation with expert doctors.</p>
+    </div>
+</div>
+
+<!-- Contact Info & Form -->
+<div class="container">
+    <div class="contact-grid">
+        <!-- Info Side -->
+        <div>
+            <h2 class="mb-4 text-secondary">Get In Touch</h2>
+            <p class="text-secondary mb-5">Have a question about an order or need help uploading a prescription? Our
+                support team is available 24/7 to assist you.</p>
+
+            <div class="info-cards">
+                <div class="info-card animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <h4 class="mb-2">Phone</h4>
+                    <p class="text-secondary" style="font-size: 0.875rem;">+1 (800) 123-4567<br>Mon-Sun: 24/7</p>
+                </div>
+                <div class="info-card animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <h4 class="mb-2">Email</h4>
+                    <p class="text-secondary" style="font-size: 0.875rem;">support@medicare.com<br>Response in 2 hrs</p>
+                </div>
+                <div class="info-card animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <h4 class="mb-2">Address</h4>
+                    <p class="text-secondary" style="font-size: 0.875rem;">123 Health Ave,<br>Medical City, MC 10010</p>
+                </div>
+            </div>
+
+            <!-- Google Map Embedded (Placeholder) -->
+            <div style="width: 100%; height: 250px; background: #e2e8f0; border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; color: var(--text-secondary);">
+                <div style="text-align: center;">
+                    <i class="fa-solid fa-map-location-dot"
+                       style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p>Interactive Map</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div>
+            <form class="contact-form animate-fade-in" id="contactForm">
+                <h2>Send a Message</h2>
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" required placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <select class="form-control">
+                        <option>Order Inquiry</option>
+                        <option>Prescription Help</option>
+                        <option>Doctor Consultation</option>
+                        <option>Feedback / Complaints</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" rows="5" required
+                              placeholder="How can we help you today?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Send Message <i class="fa-regular fa-paper-plane" style="margin-left: 0.5rem;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Doctors Section -->
+<section class="doctors-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Channel a Doctor Online</h2>
+            <p class="text-secondary">Book a video consultation with verified medical professionals.</p>
+        </div>
+
+        <div class="doctors-grid" id="doctorsGrid">
+            <!-- Doctors injected via JS -->
+        </div>
+    </div>
+</section>
+
+<!-- Booking Modal -->
+<div class="modal-overlay" id="bookingModalOverlay">
+    <div class="modal">
+        <span class="modal-close" id="closeModal">&times;</span>
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <h2 style="color: var(--primary);">Confirm Booking</h2>
+            <p class="text-secondary" id="modalDocName">Dr. Sarah Jenkins</p>
+        </div>
+
+        <form id="bookingForm">
+            <div style="background: var(--background); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="text-secondary">Date:</span>
+                    <strong id="modalDate">Today</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="text-secondary">Time:</span>
+                    <strong id="modalTime" style="color: var(--primary);">10:00 AM</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span class="text-secondary">Consultation Fee:</span>
+                    <strong>$40.00</strong>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Patient Name</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Reason for visit</label>
+                <input type="text" class="form-control" required placeholder="E.g., Fever, General checkup">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Proceed to Payment</button>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer" style="margin-top: 0;">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo mb-4" style="color: white;">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    Medi<span style="color: var(--primary-light);">Care</span>
+                </div>
+                <p style="color: #cbd5e1; margin-bottom: 1.5rem;">Your trusted online pharmacy.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="medicines.html">Shop Medicines</a></li>
+                    <li><a href="prescription.html">Upload Prescription</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 MediCare Online Pharmacy. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Render Doctors
+        const doctorsGrid = document.getElementById('doctorsGrid');
+        const modalOverlay = document.getElementById('bookingModalOverlay');
+        const closeModal = document.getElementById('closeModal');
+        const bookingForm = document.getElementById('bookingForm');
+        const modalDocName = document.getElementById('modalDocName');
+        const modalTime = document.getElementById('modalTime');
+
+        let selectedDoctor = null;
+        let selectedTime = null;
+
+        doctors.forEach(doc => {
+            const card = document.createElement('div');
+            card.className = 'doctor-card animate-fade-in';
+
+            let timeSlotsHTML = '';
+            doc.availableTimes.forEach(time => {
+                timeSlotsHTML += `<div class="time-slot" data-doc="${doc.id}" data-time="${time}">${time}</div>`;
+            });
+
+            card.innerHTML = `
+                    <div class="doctor-header">
+                        <img src="${doc.image}" alt="${doc.name}" class="doctor-img">
+                        <div class="doctor-info">
+                            <h3>${doc.name}</h3>
+                            <div class="doctor-specialty">${doc.specialty}</div>
+                        </div>
+                    </div>
+                    <div class="doctor-body">
+                        <div class="doctor-stats">
+                            <div class="doctor-stat">
+                                <i class="fa-solid fa-briefcase" style="color: var(--primary);"></i> ${doc.experience}
+                            </div>
+                            <div class="doctor-stat">
+                                <i class="fa-solid fa-star" style="color: var(--accent);"></i> ${doc.rating} Rating
+                            </div>
+                        </div>
+                        <h4 style="font-size: 0.875rem; margin-bottom: 1rem; color: var(--text-secondary);">Available Today:</h4>
+                        <div class="available-times">
+                            ${timeSlotsHTML}
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%; border-radius: var(--border-radius);" disabled id="btn-${doc.id}">
+                            Select a Time Slot
+                        </button>
+                    </div>
+                `;
+            doctorsGrid.appendChild(card);
+        });
+
+        // Time Slot Selection logic
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function () {
+                const docId = this.dataset.doc;
+                const docInfo = doctors.find(d => d.id === docId);
+
+                // Remove selected state from other slots for THIS doctor
+                const siblingSlots = this.parentElement.querySelectorAll('.time-slot');
+                siblingSlots.forEach(s => s.classList.remove('selected'));
+
+                // Select this slot
+                this.classList.add('selected');
+
+                // Enable booking button
+                const btn = document.getElementById(`btn-${docId}`);
+                btn.disabled = false;
+                btn.className = 'btn btn-primary';
+                btn.style.width = '100%';
+                btn.style.borderRadius = 'var(--border-radius)';
+                btn.textContent = 'Book Consultation';
+
+                // Attach event to button specifically for this selected state
+                btn.onclick = () => {
+                    selectedDoctor = docInfo;
+                    selectedTime = this.dataset.time;
+
+                    // Populate modal
+                    modalDocName.textContent = selectedDoctor.name;
+                    modalTime.textContent = selectedTime;
+
+                    // Show modal
+                    modalOverlay.classList.add('active');
+                };
+            });
+        });
+
+        // Modal Logic
+        closeModal.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        // Close on outside click
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+        // Handle Forms
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = contactForm.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+            setTimeout(() => {
+                btn.innerHTML = 'Message Sent! <i class="fa-solid fa-check"></i>';
+                btn.className = 'btn btn-success';
+                btn.style.backgroundColor = 'var(--success)';
+                contactForm.reset();
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.className = 'btn btn-primary';
+                    btn.style.backgroundColor = '';
+                }, 3000);
+            }, 1000);
+        });
+
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = bookingForm.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+            setTimeout(() => {
+                modalOverlay.classList.remove('active');
+                if (typeof showToast === 'function') {
+                    showToast(`Booking confirmed with ${selectedDoctor.name} at ${selectedTime}`);
+                } else {
+                    alert(`Booking confirmed with ${selectedDoctor.name} at ${selectedTime}`);
+                }
+                btn.innerHTML = 'Proceed to Payment';
+                bookingForm.reset();
+
+                // Deselect time slot
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                document.getElementById(`btn-${selectedDoctor.id}`).disabled = true;
+                document.getElementById(`btn-${selectedDoctor.id}`).className = 'btn btn-outline';
+                document.getElementById(`btn-${selectedDoctor.id}`).textContent = 'Select a Time Slot';
+            }, 1500);
+        });
+    });
+</script>
+</body>
+</html>

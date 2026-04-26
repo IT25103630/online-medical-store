@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register | MediCare</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, var(--background) 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-hover);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .auth-image {
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.9) 0%, rgba(17, 94, 89, 0.9) 100%),
+            url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 3rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .auth-image h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-image p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .brand-logo {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+        }
+
+        .auth-forms {
+            padding: 4rem 3rem;
+            position: relative;
+            background: white;
+        }
+
+        .form-switcher {
+            display: flex;
+            background: var(--background);
+            border-radius: var(--border-radius-full);
+            padding: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .switcher-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            font-weight: 600;
+            border-radius: var(--border-radius-full);
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .switcher-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+        }
+
+        .form-header h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-social {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: white;
+            transition: var(--transition);
+            color: var(--text-primary);
+        }
+
+        .btn-social:hover {
+            background: var(--background);
+            border-color: #cbd5e1;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .divider span {
+            padding: 0 1rem;
+            font-size: 0.875rem;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        /* Password Wrapper for Toggle */
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 992px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-image {
+                display: none; /* Hide image on smaller screens */
+            }
+
+            .brand-logo {
+                display: flex;
+                color: var(--primary);
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 2rem;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-wrapper">
+    <div class="auth-container animate-fade-in">
+        <!-- Left Side Image -->
+        <div class="auth-image">
+            <a href="index.html" class="brand-logo" style="text-decoration: none;">
+                <i class="fa-solid fa-heart-pulse"></i> MediCare
+            </a>
+            <h2>Your Health,<br>In One Place.</h2>
+            <p>Join millions of users who trust MediCare for their daily healthcare needs. Fast deliveries, genuine
+                products, and expert consultations.</p>
+        </div>
+
+        <!-- Right Side Form -->
+        <div class="auth-forms">
+            <!-- Mobile only logo -->
+            <a href="index.html" class="brand-logo d-none" style="text-decoration: none;">
+                <i class="fa-solid fa-heart-pulse"></i> MediCare
+            </a>
+
+            <div class="form-switcher">
+                <button class="switcher-btn active" id="btnLoginTab">Login</button>
+                <button class="switcher-btn" id="btnRegTab">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active">
+                <div class="form-header">
+                    <h3>Welcome Back</h3>
+                    <p class="text-secondary">Please enter your details to sign in.</p>
+                </div>
+
+                <div class="social-login">
+                    <button type="button" class="btn-social">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                             alt="Google" width="18"> Google
+                    </button>
+                    <button type="button" class="btn-social">
+                        <i class="fa-brands fa-apple" style="font-size: 1.25rem;"></i> Apple
+                    </button>
+                </div>
+
+                <div class="divider">
+                    <span>or continue with email</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <a href="#" class="forgot-password">Forgot Password?</a>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+            </form>
+
+            <!-- Registration Form -->
+            <form id="regForm" class="auth-form">
+                <div class="form-header">
+                    <h3>Create Account</h3>
+                    <p class="text-secondary">Join us and start managing your health.</p>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" placeholder="John" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Doe" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" class="form-control" id="regPassword"
+                               placeholder="Create a secure password" required minlength="8">
+                        <button type="button" class="password-toggle" onclick="togglePassword('regPassword', this)">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: flex; gap: 0.5rem; align-items: flex-start;">
+                    <input type="checkbox" id="terms" required style="margin-top: 5px;">
+                    <label for="terms" class="text-secondary" style="font-size: 0.875rem;">
+                        I agree to MediCare's <a href="#" style="color: var(--primary);">Terms of Service</a> and <a
+                            href="#" style="color: var(--primary);">Privacy Policy</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create Account
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnLoginTab = document.getElementById('btnLoginTab');
+        const btnRegTab = document.getElementById('btnRegTab');
+        const loginForm = document.getElementById('loginForm');
+        const regForm = document.getElementById('regForm');
+
+        // Set up mobile display for brand logo
+        if (window.innerWidth <= 992) {
+            document.querySelector('.auth-forms .brand-logo').classList.remove('d-none');
+        }
+
+        btnLoginTab.addEventListener('click', () => {
+            btnRegTab.classList.remove('active');
+            btnLoginTab.classList.add('active');
+
+            regForm.classList.remove('active');
+            loginForm.classList.add('active');
+        });
+
+        btnRegTab.addEventListener('click', () => {
+            btnLoginTab.classList.remove('active');
+            btnRegTab.classList.add('active');
+
+            loginForm.classList.remove('active');
+            regForm.classList.add('active');
+        });
+
+        // Form Submit Logic (Simulated)
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = loginForm.querySelector('button[type="submit"]');
+            const prev = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing In...';
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        regForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = regForm.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating Account...';
+
+            setTimeout(() => {
+                // Switch to login tab after successful registration
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Success!';
+                btn.style.backgroundColor = 'var(--success)';
+
+                setTimeout(() => {
+                    btn.style.backgroundColor = '';
+                    btn.innerHTML = 'Create Account';
+                    regForm.reset();
+                    btnLoginTab.click();
+
+                    // Fake a toast
+                    if (typeof showToast === 'function') {
+                        showToast("Account created successfully. Please log in.");
+                    } else {
+                        alert("Account created successfully. Please log in.");
+                    }
+                }, 1500);
+            }, 2000);
+        });
+    });
+
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+</body>
+</html>
